@@ -33,13 +33,13 @@ class MainActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Greeting(name = "Android")
+                            Greeting(name = "子欲赤石乎？")
                             Spacer(modifier = Modifier.height(16.dp))
                             Button(onClick = {
                                 val intent = Intent(this@MainActivity, NewActivity::class.java)
                                 startActivity(intent)
                             }) {
-                                Text("Go to NewActivity")
+                                Text("好，我吃。")
                             }
                         }
                     }
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = name,
         modifier = modifier
     )
 }
