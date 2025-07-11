@@ -57,8 +57,20 @@ public class ImageFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
-    if (isPlaying && mediaPlayer != null && !mediaPlayer.isPlaying()) {
-      mediaPlayer.start();
+    if (isPlaying) {
+      if (mediaPlayer == null) {
+        // 重新创建 MediaPlayer
+        mediaPlayer = MediaPlayer.create(getContext(), audioResId);
+        mediaPlayer.setOnCompletionListener(mp -> {
+          mp.release();
+          mediaPlayer = null;
+          isPlaying = false;
+        });
+      }
+      if (!mediaPlayer.isPlaying()) {
+        // 启动播放
+        mediaPlayer.start();
+      }
     }
   }
 
