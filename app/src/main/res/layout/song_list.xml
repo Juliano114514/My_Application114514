@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rcv_song_list"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    tools:listitem="@layout/item_layout">
+  </androidx.recyclerview.widget.RecyclerView>
+
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="@color/teal_700">
+
+    <ImageView
+      android:id="@+id/iv_bottom_icon"
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:src="@drawable/baseline_music_note_24" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/default_bar_text"
+      android:textSize="25sp"
+      android:textColor="@color/white"/>
+
+
+  </LinearLayout>
+
+</LinearLayout>
