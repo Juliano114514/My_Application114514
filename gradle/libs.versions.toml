@@ -1,6 +1,7 @@
 [versions]
 agp = "8.10.1"
 appcompatV7 = "28.0.0"
+butterknife = "10.2.3"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -17,6 +18,8 @@ constraintlayout = "2.2.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 appcompat-v7 = { module = "com.android.support:appcompat-v7", version.ref = "appcompatV7" }
+butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterknife" }
+butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

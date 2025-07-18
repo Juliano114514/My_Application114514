@@ -21,13 +21,11 @@ public class MusicService extends Service {
   private ArrayList<SongData> mPlaylist;
   private int curIndex;
 
-
   @Override
   public void onCreate() {
     super.onCreate();
     mMediaPlayer = new MediaPlayer();
     mPlaylist = new ArrayList<>();
-
   }
 
   @Override
@@ -60,9 +58,7 @@ public class MusicService extends Service {
     mPlaylist = mList;
   }
 
-  void updateMusicCurIndex(int idx){
-    curIndex = idx;
-  }
+  void updateMusicCurIndex(int idx){curIndex = idx;}
 
   void startPlay(){
     if(curIndex<0 || curIndex >= mPlaylist.size()){
@@ -75,6 +71,8 @@ public class MusicService extends Service {
     AssetManager assetManager = getAssets();
 
     try{
+      mMediaPlayer.stop();
+      mMediaPlayer.reset();
       AssetFileDescriptor fileDescriptor = assetManager.openFd(songName);
       mMediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),
           fileDescriptor.getStartOffset(),
@@ -85,7 +83,45 @@ public class MusicService extends Service {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
 
+  public boolean isPlaying() {
+    return mMediaPlayer.isPlaying();
+  }
+
+  public void pause() {
+    if(!mMediaPlayer.isPlaying()){
+      return;
+    }
+    mMediaPlayer.pause();
+  }
+
+  public void play() {
+    if(mMediaPlayer.isPlaying()){
+      return;
+    }
+    mMediaPlayer.start();
+  }
+
+  public void last(){
+    int preIdx = (curIndex-1 + mPlaylist.size()) % mPlaylist.size();
+    updateMusicCurIndex(preIdx);
+    startPlay();
+  }
+
+  public void next(){
+    int nxtIdx = (curIndex+1) % mPlaylist.size();
+    updateMusicCurIndex(nxtIdx);
+    startPlay();
+  }
+
+  public void stop() {
+    mMediaPlayer.stop();
+    try{
+    mMediaPlayer.prepare();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   // =================定义binder实现====================
@@ -95,7 +131,6 @@ public class MusicService extends Service {
     public MusicBinder(MusicService mMusicService) {
       this.mMusicService = mMusicService;
     }
-
 
     public void startPlay(){
       mMusicService.startPlay();
@@ -109,5 +144,32 @@ public class MusicService extends Service {
       mMusicService.updateMusicCurIndex(idx);
     }
 
+    public boolean isPlaying() {
+      return mMusicService.isPlaying();
+    }
+
+    public void pause() {
+      mMusicService.pause();
+    }
+
+    public void play() {
+      mMusicService.play();
+    }
+
+    public void last(){
+      mMusicService.last();
+    }
+
+    public void next(){
+      mMusicService.next();
+    }
+
+    public void stop() {
+      mMusicService.stop();
+    }
+
+    public SongData getCurSong(){
+      return mMusicService.mPlaylist.get(mMusicService.curIndex);
+    }
   }
 }

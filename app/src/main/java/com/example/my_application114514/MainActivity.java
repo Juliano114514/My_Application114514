@@ -1,8 +1,10 @@
 package com.example.my_application114514;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -32,10 +34,19 @@ public class MainActivity extends AppCompatActivity {
 
   private void initData() {
     mPlaylist = new ArrayList<>();
-    mPlaylist.add(new SongData("general_kim.mp3"));
-    mPlaylist.add(new SongData("general_kim.mp3"));
-    mPlaylist.add(new SongData("general_kim.mp3"));
-    mPlaylist.add(new SongData("general_kim.mp3"));
+    AssetManager assetManager = getAssets();
+    try {
+      // 读取 songs 文件夹中的 MP3 文件列表
+      String[] songFiles = assetManager.list("");
+      for (String songFile : songFiles) {
+        if (songFile.endsWith(".mp3")) {
+          mPlaylist.add(new SongData(songFile));
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      Toast.makeText(this, "Error loading songs from assets", Toast.LENGTH_SHORT).show();
+    }
   }
 
   private void initSongList() {
