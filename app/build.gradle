@@ -11,9 +11,10 @@ android {
     defaultConfig {
         applicationId "com.example.my_application114514"
         minSdk 24
+        //noinspection OldTargetApi
         targetSdk 35
         versionCode 1
-        versionName "1.0"
+        versionName "2.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

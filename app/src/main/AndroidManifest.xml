@@ -16,6 +16,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+      <activity
+        android:name=".PlayActivity"
+        android:theme="@style/Theme.My_Application114514">
+        </activity>
+
+      <service android:name="com.example.my_application114514.service.MusicService" />
+
     </application>
 
 </manifest>

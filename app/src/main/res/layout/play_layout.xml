@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <ImageView
+    android:id="@+id/albumpic"
+    android:layout_width="250dp"
+    android:layout_height="250dp"
+    android:layout_marginTop="32dp"
+    android:src="@mipmap/ic_launcher"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/titlle" />
+
+  <ImageView
+    android:id="@+id/play_mode"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_marginStart="32dp"
+    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/imageView"
+    app:layout_constraintVertical_bias="0.0"
+    app:srcCompat="@drawable/outline_playlist_play_24" />
+
+  <ImageView
+  android:id="@+id/imageView2"
+  android:layout_width="40dp"
+  android:layout_height="40dp"
+  android:layout_marginStart="40dp"
+  app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+  app:layout_constraintStart_toEndOf="@+id/imageView"
+  app:layout_constraintTop_toTopOf="@+id/imageView3"
+  app:layout_constraintVertical_bias="0.0"
+  app:srcCompat="@drawable/baseline_play_arrow_24" />
+
+  <ImageView
+    android:id="@+id/imageView4"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_marginEnd="32dp"
+    android:layout_marginStart="40dp"
+    android:layout_marginTop="32dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/imageView3"
+    app:layout_constraintTop_toBottomOf="@+id/proc_bar"
+    app:srcCompat="@drawable/baseline_stop_24" />
+
+  <ImageView
+  android:id="@+id/imageView"
+  android:layout_width="40dp"
+  android:layout_height="40dp"
+  android:layout_marginStart="40dp"
+  app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+  app:layout_constraintStart_toEndOf="@+id/play_mode"
+  app:layout_constraintTop_toTopOf="@+id/imageView2"
+  app:layout_constraintVertical_bias="0.0"
+  app:srcCompat="@drawable/baseline_skip_previous_24" />
+
+  <ImageView
+  android:id="@+id/imageView3"
+  android:layout_width="40dp"
+  android:layout_height="40dp"
+  android:layout_marginStart="40dp"
+  app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+  app:layout_constraintStart_toEndOf="@+id/imageView2"
+  app:layout_constraintTop_toTopOf="@+id/imageView4"
+  app:layout_constraintVertical_bias="0.0"
+  app:srcCompat="@drawable/baseline_skip_next_24" />
+
+  <SeekBar
+    android:id="@+id/proc_bar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="24dp"
+    android:layout_marginStart="24dp"
+    android:layout_marginTop="24dp"
+    android:progress="50"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cur_time" />
+
+  <TextView
+    android:id="@+id/cur_time"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="45dp"
+    android:layout_marginTop="32dp"
+    android:text="00:00"
+    android:textSize="20sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/albumpic" />
+
+  <TextView
+  android:id="@+id/tot_time"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_marginEnd="45dp"
+  android:text="114:514"
+  android:textSize="20sp"
+  app:layout_constraintBottom_toBottomOf="@+id/cur_time"
+  app:layout_constraintEnd_toEndOf="parent"
+  app:layout_constraintTop_toTopOf="@+id/cur_time" />
+
+  <TextView
+    android:id="@+id/titlle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="48dp"
+    android:text="歌曲标题"
+    android:textSize="25sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

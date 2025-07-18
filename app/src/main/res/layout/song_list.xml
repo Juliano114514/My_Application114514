@@ -11,14 +11,19 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
+    android:padding="10dp"
     tools:listitem="@layout/item_layout">
   </androidx.recyclerview.widget.RecyclerView>
+
+
+
 
   <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    android:padding="10dp"
     android:background="@color/teal_700">
 
     <ImageView
@@ -32,9 +37,10 @@
       android:layout_height="wrap_content"
       android:text="@string/default_bar_text"
       android:textSize="25sp"
+      android:padding="10dp"
       android:textColor="@color/white"/>
 
-
   </LinearLayout>
+
 
 </LinearLayout>
