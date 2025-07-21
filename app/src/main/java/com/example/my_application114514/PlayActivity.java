@@ -58,24 +58,16 @@ public class PlayActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onNext(int songIndex, SongData song) {
-
-        }
+        public void onNext(int songIndex, SongData song) {}
 
         @Override
-        public void onLast(int songIndex, SongData song) {
-
-        }
+        public void onLast(int songIndex, SongData song) {}
 
         @Override
-        public void onPause(int songIndex, SongData song) {
-
-        }
+        public void onPause(int songIndex, SongData song) {}
 
         @Override
-        public void onPlay(int songIndex, SongData song) {
-
-        }
+        public void onPlay(int songIndex, SongData song) {}
       });
 
       updateUI();
@@ -111,12 +103,15 @@ public class PlayActivity extends AppCompatActivity {
     Intent intent = getIntent();
     curIndex = intent.getIntExtra(GlobalConstants.KEY_SONG_INDEX,0);
     mPlaylist = (ArrayList<SongData>) intent.getSerializableExtra(GlobalConstants.KEY_SONG_LIST);
+    ArrayList<MusicBinder> mBinder = (ArrayList<MusicBinder>)intent.getSerializableExtra(GlobalConstants.KEY_SONG_BINDER);
 
     updateTitle(mPlaylist.get(curIndex).getSongName());
     updatePic(mPlaylist.get(curIndex).getSongName());
-    startMusicService();
-    initView();
 
+    if (mBinder != null && !mBinder.isEmpty()) { mMusicBinder = mBinder.get(0); }
+    if(mMusicBinder == null)startMusicService();
+    initView();
+    if(mMusicBinder != null)  updateUI();
   }
 
 
@@ -271,6 +266,7 @@ public class PlayActivity extends AppCompatActivity {
     // bind 启动 service
     Intent intent = new Intent(this, MusicService.class);
     bindService(intent,mlink,BIND_AUTO_CREATE);
+    startService(intent);
   }
 
   public Bitmap getAlbumCover(String mp3FileName) {
@@ -294,5 +290,14 @@ public class PlayActivity extends AppCompatActivity {
       timer.cancel();
       timer = null;
     }
+
+    ArrayList<MusicBinder> tmp = new ArrayList<>();
+    tmp.add(mMusicBinder);
+    Intent intent = new Intent(GlobalConstants.KEY_SONG_BINDER);
+    intent.putExtra(GlobalConstants.KEY_SONG_BINDER,tmp);
+    intent.putExtra(GlobalConstants.KEY_SONG_PLAY_MODE,mCurMode);
+    sendBroadcast(intent);
   }
+
+
 }

@@ -1,6 +1,7 @@
 package com.example.my_application114514.service;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,7 @@ import com.example.my_application114514.util.PlayModeHelper;
 
 import androidx.annotation.Nullable;
 
-public class MusicService extends Service {
+public class MusicService extends Service implements Serializable {
 
   private MediaPlayer mMediaPlayer;
   public ArrayList<SongData> mPlaylist;
@@ -57,7 +58,6 @@ public class MusicService extends Service {
         if(mPlayerListener != null){
           mPlayerListener.onComplete(curIndex,mPlaylist.get(curIndex));
         }
-
       }
     });
 
@@ -208,8 +208,5 @@ public class MusicService extends Service {
     // 将列表转换为 int 数组
     return list.stream().mapToInt(Integer::intValue).toArray();
   }
-
-
-
 
 }

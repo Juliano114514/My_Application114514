@@ -63,6 +63,10 @@ public class MusicBinder extends Binder {
     return mMusicService.getEndProgress();
   }
 
+  public int getCurIdx(){
+    return mMusicService.curIndex;
+  }
+
   public void seekTo(int progress) {
     mMusicService.seekTo(progress);
   }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:orientation="vertical"
   android:layout_width="match_parent"
@@ -19,26 +20,80 @@
 
 
   <LinearLayout
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/teal_700"
     android:gravity="center_vertical"
-    android:padding="10dp"
-    android:background="@color/teal_700">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
-    <ImageView
-      android:id="@+id/iv_bottom_icon"
-      android:layout_width="60dp"
-      android:layout_height="60dp"
-      android:src="@drawable/baseline_music_note_24" />
+    <LinearLayout
+      android:id="@+id/state_bar"
+      android:layout_height="match_parent"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:paddingBottom="10dp">
 
-    <TextView
+      <ImageView
+        android:id="@+id/bar_bottom_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/baseline_music_note_24" />
+
+      <TextView
+        android:id="@+id/bar_song_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:padding="10dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/default_bar_text"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/default_bar_text"
-      android:textSize="25sp"
-      android:padding="10dp"
-      android:textColor="@color/white"/>
+      android:layout_height="match_parent"
+      android:layout_gravity="end"
+      android:paddingBottom="10dp">
+
+      <ImageView
+        android:id="@+id/bar_last_switch"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/baseline_skip_previous_24" />
+
+      <ImageView
+        android:id="@+id/bar_play_pause"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/baseline_play_arrow_24" />
+
+      <ImageView
+        android:id="@+id/bar_next_switch"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/baseline_skip_next_24" />
+
+      <TextView
+        android:id="@+id/bar_lyric_switch"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:text="词"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+    </LinearLayout>
+
+
 
   </LinearLayout>
 

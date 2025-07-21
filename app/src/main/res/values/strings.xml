@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">My_Application114514</string><string name="default_song">歌曲名</string><string name="default_bar_text">我曾是你的梦</string>
+    <string name="app_name">My_Application114514</string>
+  <string name="default_song">歌曲名</string>
+  <string name="default_bar_text">未播放任何歌曲 未播放任何歌曲 未播放任何歌曲</string>
 </resources>
