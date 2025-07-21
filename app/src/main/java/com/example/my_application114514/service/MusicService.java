@@ -2,6 +2,10 @@ package com.example.my_application114514.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,19 +16,51 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import com.example.my_application114514.data.SongData;
+import com.example.my_application114514.listener.PlayerListener;
+import com.example.my_application114514.util.MusicBinder;
+import com.example.my_application114514.util.PlayModeHelper;
 
 import androidx.annotation.Nullable;
 
 public class MusicService extends Service {
 
   private MediaPlayer mMediaPlayer;
-  private ArrayList<SongData> mPlaylist;
-  private int curIndex;
+  public ArrayList<SongData> mPlaylist;
+  public int curIndex;
+
+  int mCurMode = PlayModeHelper.PLAY_ORDERED;  // 播放模式
+  private int randomCnt = -1;  // 随机计数器
+  private int[] randomOrder;  // 随机播放顺序数组
+
+  private PlayerListener mPlayerListener;
 
   @Override
   public void onCreate() {
     super.onCreate();
     mMediaPlayer = new MediaPlayer();
+    mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+      @Override
+      public void onCompletion(MediaPlayer mp) {
+        switch (mCurMode) {
+          case PlayModeHelper.PLAY_ORDERED:
+            orderedMode();break;
+          case PlayModeHelper.PLAY_CIRCLE:
+            circleMode();break;
+          case PlayModeHelper.PLAY_SINGLE:
+            singleMode();break;
+          case PlayModeHelper.PLAY_RANDOM:
+            randomMode();break;
+          default:break;
+        }
+
+        // 自然播放结束到下一首后，通知主活动更新界面
+        if(mPlayerListener != null){
+          mPlayerListener.onComplete(curIndex,mPlaylist.get(curIndex));
+        }
+
+      }
+    });
+
     mPlaylist = new ArrayList<>();
   }
 
@@ -54,13 +90,13 @@ public class MusicService extends Service {
     return new MusicBinder(this); // 返回binder的同时，通过binder的构造函数与service绑定
   }
 
-  void updateMusicList(ArrayList<SongData> mList){
+  public void updateMusicList(ArrayList<SongData> mList){
     mPlaylist = mList;
   }
 
-  void updateMusicCurIndex(int idx){curIndex = idx;}
+  public void updateMusicCurIndex(int idx){curIndex = idx;}
 
-  void startPlay(){
+  public void startPlay(){
     if(curIndex<0 || curIndex >= mPlaylist.size()){
       return;
     }
@@ -105,13 +141,16 @@ public class MusicService extends Service {
 
   public void last(){
     int preIdx = (curIndex-1 + mPlaylist.size()) % mPlaylist.size();
-    updateMusicCurIndex(preIdx);
-    startPlay();
+    playIdx(preIdx);
   }
 
   public void next(){
     int nxtIdx = (curIndex+1) % mPlaylist.size();
-    updateMusicCurIndex(nxtIdx);
+    playIdx(nxtIdx);
+  }
+
+  public void playIdx(int position){
+    updateMusicCurIndex(position);
     startPlay();
   }
 
@@ -124,52 +163,53 @@ public class MusicService extends Service {
     }
   }
 
-  // =================定义binder实现====================
-  public class MusicBinder extends Binder {
-    MusicService mMusicService;
-
-    public MusicBinder(MusicService mMusicService) {
-      this.mMusicService = mMusicService;
-    }
-
-    public void startPlay(){
-      mMusicService.startPlay();
-    }
-
-    public void updateMusicList(ArrayList<SongData> mList){
-      mMusicService.updateMusicList(mList);
-    }
-
-    public void updateMusicCurIndex(int idx){
-      mMusicService.updateMusicCurIndex(idx);
-    }
-
-    public boolean isPlaying() {
-      return mMusicService.isPlaying();
-    }
-
-    public void pause() {
-      mMusicService.pause();
-    }
-
-    public void play() {
-      mMusicService.play();
-    }
-
-    public void last(){
-      mMusicService.last();
-    }
-
-    public void next(){
-      mMusicService.next();
-    }
-
-    public void stop() {
-      mMusicService.stop();
-    }
-
-    public SongData getCurSong(){
-      return mMusicService.mPlaylist.get(mMusicService.curIndex);
-    }
+  public int getCurProgress() {
+    return mMediaPlayer.getCurrentPosition();
   }
+
+  public int getEndProgress(){
+    return mMediaPlayer.getDuration();
+  }
+
+  public void seekTo(int progress) {
+    mMediaPlayer.seekTo(progress);
+  }
+
+  public void setPlayMode(int mode) {
+    mCurMode = mode;
+  }
+
+  public void setPlayerListener(PlayerListener playerListener){
+    this.mPlayerListener = playerListener;
+  }
+
+  // ====================定义播放模式方法====================
+
+  void orderedMode(){ if(curIndex+1 != mPlaylist.size()){next();} }
+  void circleMode(){ next(); }
+  void singleMode(){ playIdx(curIndex); }
+  void randomMode(){
+    // 更新随机播放列表
+    if(randomCnt == -1 || randomCnt == mPlaylist.size()){
+      randomCnt = 0;
+      randomOrder = getRandomPermutation(mPlaylist.size());
+    }
+
+    int nextIdx = randomOrder[randomCnt++];
+    playIdx(nextIdx);
+  }
+
+
+  public static int[] getRandomPermutation(int n) {
+    // 创建一个包含 0 到 n-1 的列表
+    List<Integer> list = IntStream.range(0, n).boxed().collect(Collectors.toList());
+    // 使用 Collections.shuffle 方法对列表进行随机排序
+    Collections.shuffle(list);
+    // 将列表转换为 int 数组
+    return list.stream().mapToInt(Integer::intValue).toArray();
+  }
+
+
+
+
 }
