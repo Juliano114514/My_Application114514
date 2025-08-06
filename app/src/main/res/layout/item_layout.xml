@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/ll_song_item"
+  android:id="@+id/item_song_list"
   android:orientation="horizontal"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+  android:layout_marginBottom="5dp"
+  android:layout_marginTop="5dp">
 
   <ImageView
+    android:id="@+id/item_album_pic"
     android:layout_width="50dp"
     android:layout_height="50dp"
     android:layout_margin="5dp"
@@ -14,10 +17,21 @@
   </ImageView>
 
   <TextView
-    android:id="@+id/tv_song_name"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:id="@+id/item_song_name"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
     android:text="@string/default_song"
+    android:textSize="25sp"
+    android:padding="5dp"
+    android:layout_margin="5dp">
+  </TextView>
+
+  <TextView
+    android:id="@+id/item_total_time"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:text="00:00"
     android:textSize="25sp"
     android:padding="5dp"
     android:layout_margin="5dp">
