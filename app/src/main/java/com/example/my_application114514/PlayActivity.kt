@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.my_application114514.data.GlbConsts
 
 
 import com.example.my_application114514.data.SongData
+import com.example.my_application114514.util.MediaIOHelper
 
 class PlayActivity : AppCompatActivity() {
 
@@ -22,8 +22,8 @@ class PlayActivity : AppCompatActivity() {
         setContentView(R.layout.play_layout)
 
         // 舔包时间
-        mSongList = GlbConsts.readSongList(intent)
-        mSongIndex = GlbConsts.readSongIndex(intent)
+        mSongList = MediaIOHelper.readSongList(intent)
+        mSongIndex = MediaIOHelper.readSongIndex(intent)
 
         initView()
         initUI()
@@ -39,6 +39,6 @@ class PlayActivity : AppCompatActivity() {
         val currentSong = mSongList?.get(mSongIndex) ?: return // 或者用其他默认值
         mTotalTime.text = currentSong.displayTotTime
         mPlayTitle.text = currentSong.songName
-        GlbConsts.loadAlbumPicFromAssets(this,mAlbumPic,currentSong.albumPicPath)
+        MediaIOHelper.loadAlbumPicFromAssets(this,mAlbumPic,currentSong.albumPicPath)
     }
 }

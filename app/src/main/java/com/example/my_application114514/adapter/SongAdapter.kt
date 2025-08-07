@@ -1,7 +1,6 @@
 package com.example.my_application114514.adapter
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.my_application114514.R
 import com.example.my_application114514.data.SongData
 
-import com.bumptech.glide.Glide
-import com.example.my_application114514.data.GlbConsts
+import com.example.my_application114514.util.MediaIOHelper
 
 class SongAdapter (
     private val mContext: Context,
@@ -52,7 +50,7 @@ class SongAdapter (
         val currentSong = songList[position]
         holder.songName.text = currentSong.songName
         holder.totalTime.text = currentSong.displayTotTime
-        GlbConsts.loadAlbumPicFromAssets(mContext,holder.albumPic,currentSong.albumPicPath)
+        MediaIOHelper.loadAlbumPicFromAssets(mContext,holder.albumPic,currentSong.albumPicPath)
     }
 
 

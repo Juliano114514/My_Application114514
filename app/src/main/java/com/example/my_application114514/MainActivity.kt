@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.my_application114514.adapter.SongAdapter
-import com.example.my_application114514.data.GlbConsts
 import com.example.my_application114514.data.SongData
+import com.example.my_application114514.util.MediaIOHelper
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             ).show()
             val position = mSongList.indexOf(songData) // 获得点击位置
 
-            var intent : Intent = GlbConsts.loadSongList<PlayActivity>(this,mSongList,position)
+            var intent : Intent = MediaIOHelper.loadSongList<PlayActivity>(this,mSongList,position)
             startActivity(intent) // 你需要保留一点点风味，才知道你在启动服务
         }
 
