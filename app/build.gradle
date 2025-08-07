@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    implementation libs.glide // 使用最新稳定版
+    annotationProcessor libs.compiler // 注解处理器
     implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.activity.compose
