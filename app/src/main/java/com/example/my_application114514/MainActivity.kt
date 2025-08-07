@@ -1,5 +1,6 @@
 package com.example.my_application114514
 
+import android.content.Intent
 import android.content.res.AssetFileDescriptor
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -8,14 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.my_application114514.adapter.SongAdapter
+import com.example.my_application114514.data.GlbConsts
 import com.example.my_application114514.data.SongData
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
-    var mSongList: List<SongData> = ArrayList()
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: SongAdapter
+    var mSongList: ArrayList<SongData> = ArrayList()
+    lateinit var mRecyclerView: RecyclerView
+    lateinit var mAdapter: SongAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,15 +39,20 @@ class MainActivity : AppCompatActivity() {
     fun initViewListener(){
         // 设置适配器的点击回调
         mAdapter.setOnItemClickListener { songData ->
-            // 显示点击的歌曲名称
+            // 点击弹窗
             Toast.makeText(
                 this,
-                "点击了${songData.songName}",
+                "将播放${songData.songName}",
                 Toast.LENGTH_SHORT
             ).show()
+            val position = mSongList.indexOf(songData) // 获得点击位置
+
+            var intent : Intent = GlbConsts.loadSongList<PlayActivity>(this,mSongList,position)
+            startActivity(intent) // 你需要保留一点点风味，才知道你在启动服务
         }
 
     }
+
 
     // 初始化播放列表
     fun initSongRcv(){
@@ -56,8 +63,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 动态读取assets目录下的歌曲列表
-    fun loadSongsFromAssets():List<SongData>{
-        val songList: MutableList<SongData> = ArrayList()
+    fun loadSongsFromAssets():ArrayList<SongData>{
+        val songList: ArrayList<SongData> = ArrayList()
         val assetManager = assets
 
         assetManager.list("")?.forEach{ fileName ->

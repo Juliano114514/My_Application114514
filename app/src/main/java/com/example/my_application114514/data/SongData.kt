@@ -1,8 +1,11 @@
 package com.example.my_application114514.data
 
 import android.annotation.SuppressLint
+import android.os.Parcel
+import android.os.Parcelable
 
-class SongData(assetPath: String, songName: String, totalTime: Int) {
+
+class SongData : Parcelable {
     val assetPath: String  // 资源路径
     val albumPicPath: String
         get() = assetPath.substringBeforeLast('.')+".jpg"
@@ -16,12 +19,20 @@ class SongData(assetPath: String, songName: String, totalTime: Int) {
             updateDisplay()
         }
 
+
     //  谁家好人忘记初始化了
-    init {
+    constructor(assetPath:String, songName:String,totalTime:Int) {
         this.assetPath = assetPath
         this.songName = songName
         this.totalPlayTime = totalTime
         // 初始化时更新显示时间
+        updateDisplay()
+    }
+
+    private constructor(parcel: Parcel){
+        assetPath = parcel.readString()!!
+        songName = parcel.readString()!!
+        totalPlayTime = parcel.readInt()
         updateDisplay()
     }
 
@@ -30,5 +41,23 @@ class SongData(assetPath: String, songName: String, totalTime: Int) {
         val mins = totalPlayTime / 60
         val seconds = totalPlayTime % 60
         displayTotTime = String.format("%02d:%02d",mins,seconds)
+    }
+
+    override fun describeContents():Int = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(assetPath)
+        dest.writeString(songName)
+        dest.writeInt(totalPlayTime)
+    }
+
+    companion object CREATOR : Parcelable.Creator<SongData>{
+        override fun createFromParcel(source: Parcel): SongData? {
+            return SongData(source)
+        }
+
+        override fun newArray(size: Int): Array<out SongData?>? {
+            return arrayOfNulls(size)
+        }
     }
 }

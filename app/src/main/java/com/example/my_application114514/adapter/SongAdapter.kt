@@ -13,6 +13,7 @@ import com.example.my_application114514.R
 import com.example.my_application114514.data.SongData
 
 import com.bumptech.glide.Glide
+import com.example.my_application114514.data.GlbConsts
 
 class SongAdapter (
     private val mContext: Context,
@@ -51,20 +52,9 @@ class SongAdapter (
         val currentSong = songList[position]
         holder.songName.text = currentSong.songName
         holder.totalTime.text = currentSong.displayTotTime
-        loadAlbumPicFromAssets(holder.albumPic,currentSong.albumPicPath)
+        GlbConsts.loadAlbumPicFromAssets(mContext,holder.albumPic,currentSong.albumPicPath)
     }
 
-
-    private fun loadAlbumPicFromAssets(imageView: ImageView, assetPath: String) {
-        try {
-            val inputStream = mContext.assets.open(assetPath)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
-            imageView.setImageBitmap(bitmap)
-        }catch (e:Exception){
-            imageView.setImageResource(R.mipmap.ic_launcher)
-            e.printStackTrace()
-        }
-    }
 
     override fun getItemCount() = songList.size
 }
