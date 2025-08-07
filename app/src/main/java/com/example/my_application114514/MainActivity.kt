@@ -1,8 +1,6 @@
 package com.example.my_application114514
 
 import android.content.Intent
-import android.content.res.AssetFileDescriptor
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.my_application114514.adapter.SongAdapter
 import com.example.my_application114514.data.SongData
 import com.example.my_application114514.util.MediaIOHelper
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,46 +53,11 @@ class MainActivity : AppCompatActivity() {
 
     // 初始化播放列表
     fun initSongRcv(){
-        mSongList = loadSongsFromAssets()
+        mSongList = MediaIOHelper.loadSongsFromAssets(this)
         mAdapter = SongAdapter(this,mSongList)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
         mRecyclerView.adapter = mAdapter
     }
 
-    // 动态读取assets目录下的歌曲列表
-    fun loadSongsFromAssets():ArrayList<SongData>{
-        val songList: ArrayList<SongData> = ArrayList()
-        val assetManager = assets
 
-        assetManager.list("")?.forEach{ fileName ->
-            if(fileName.endsWith(".mp3")){
-                val songName = fileName.removeSuffix(".mp3")
-                val assetPath = "${fileName}"
-                val duration = getSongDurationFromAssets(assetPath) // 获取时长
-                songList.add(SongData(
-                    assetPath = assetPath,
-                    songName = songName,
-                    totalTime = duration,
-                ))
-            }
-        }
-        return songList
-    }
-
-    private fun getSongDurationFromAssets(assetPath:String) : Int{
-        val mediaplayer = MediaPlayer()
-        return try {
-            val afd: AssetFileDescriptor = assets.openFd(assetPath)
-            mediaplayer.setDataSource(afd.fileDescriptor,afd.startOffset,afd.length)
-            mediaplayer.prepare()
-            val duration = mediaplayer.duration / 1000
-            afd.close()
-            duration
-        }catch (e: IOException){
-            e.printStackTrace()
-            0
-        }finally {
-            mediaplayer.release()
-        }
-    }
 }
