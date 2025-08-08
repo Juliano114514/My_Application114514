@@ -34,10 +34,16 @@ class MusicService : Service() {
     fun setMusicCurIndex(idx: Int) { this.curSongIdx = idx }
     fun getMusicList():ArrayList<SongData>? { return this.mSongList  }
     fun getMusicCurIndex():Int { return this.curSongIdx }
+    fun getCurProgress():Int{return mMediaPlayer.currentPosition}
 
     // ==================== 播放控制
+    fun seekTo(progress:Int){ mMediaPlayer.seekTo(progress) }
     fun isMusicPlaying() : Boolean{ return mMediaPlayer.isPlaying() }
     fun pause(){ mMediaPlayer.pause() }
+    fun stop(){
+        mMediaPlayer.stop()
+        mMediaPlayer.prepare()
+    }
     fun play(){
         if(mMediaPlayer.isPlaying())return
         mMediaPlayer.start()
@@ -61,8 +67,8 @@ class MusicService : Service() {
             mMediaPlayer.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
             afd.close() // 及时关闭描述符
 
-            mMediaPlayer.prepareAsync()
-            mMediaPlayer.setOnPreparedListener { mp -> mp.start() }
+            mMediaPlayer.prepare()
+            mMediaPlayer.start()
             mMediaPlayer.setOnErrorListener { _, what, extra ->
                 Log.e("Player", "播放错误: $what | $extra")
                 false
@@ -89,6 +95,7 @@ class MusicService : Service() {
         }
         startPlay() // 调用无参数版本开始播放
     }
+
 
 
     // 新增：在服务销毁时释放资源

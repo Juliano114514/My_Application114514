@@ -44,7 +44,7 @@ object MediaIOHelper {
             val afd: AssetFileDescriptor = mContext.assets.openFd(assetPath)
             mediaplayer.setDataSource(afd.fileDescriptor,afd.startOffset,afd.length)
             mediaplayer.prepare()
-            val duration = mediaplayer.duration / 1000
+            val duration = mediaplayer.duration
             afd.close()
             duration
         }catch (e: IOException){

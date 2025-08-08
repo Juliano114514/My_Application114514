@@ -9,6 +9,7 @@ class MusicBinder(private val mMusicService : MusicService) : Binder() {
     fun setMusicCurIndex(curIndex:Int){ mMusicService.setMusicCurIndex(curIndex) }
     fun getMusicCurIndex():Int{ return mMusicService.getMusicCurIndex() }
     fun getMusicList():ArrayList<SongData>?{ return mMusicService.getMusicList() }
+    fun getCurProgress():Int{ return mMusicService.getCurProgress(); }
 
     fun startPlay(idx : Int){ mMusicService.startPlay(idx) }
     fun startPlay(){ mMusicService.startPlay() }
@@ -17,4 +18,6 @@ class MusicBinder(private val mMusicService : MusicService) : Binder() {
     fun play(){ mMusicService.play() }
     fun previous(){ mMusicService.previous() }
     fun nextSong(){mMusicService.nextSong()}
+    fun stop(){mMusicService.stop()}
+    fun seekTo(progress:Int){mMusicService.seekTo(progress)}
 }

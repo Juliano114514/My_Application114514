@@ -3,6 +3,7 @@ package com.example.my_application114514.data
 import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.my_application114514.util.InteractiveEvent.getCurTimeText
 
 
 class SongData : Parcelable {
@@ -38,9 +39,7 @@ class SongData : Parcelable {
 
     @SuppressLint("DefaultLocale")
     fun updateDisplay(){
-        val mins = totalPlayTime / 60
-        val seconds = totalPlayTime % 60
-        displayTotTime = String.format("%02d:%02d",mins,seconds)
+        displayTotTime = getCurTimeText(totalPlayTime)
     }
 
     override fun describeContents():Int = 0
