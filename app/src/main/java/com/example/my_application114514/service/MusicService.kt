@@ -7,34 +7,92 @@ import android.content.res.AssetManager
 import android.media.MediaPlayer
 import android.os.IBinder
 import android.util.Log
+import com.example.my_application114514.R
+import com.example.my_application114514.data.GlobalConsts
 import com.example.my_application114514.data.SongData
+import com.example.my_application114514.listener.MyPlayerListener
 import com.example.my_application114514.service.binder.MusicBinder
+import com.example.my_application114514.util.InteractiveEvent
 import java.io.IOException
 
 class MusicService : Service() {
 
+    private lateinit var mMyPlayerListener : MyPlayerListener
     private lateinit var mMediaPlayer: MediaPlayer
+    private var mRamdomPlayList: ArrayList<Int> ?= ArrayList()
     private var mSongList : ArrayList<SongData> ?= ArrayList()
     private var curSongIdx : Int = 0
+    private var mPlayMode : Int = GlobalConsts.PLAY_MODE_ORDERED
+    private var mRndIdx : Int = 0
+
 
     override fun onCreate() {
         super.onCreate()
-
         mMediaPlayer = MediaPlayer()
         mSongList = ArrayList()
+
+        // 添加播放完成监听器
+        mMediaPlayer.setOnCompletionListener {
+            onMusicCompletion()
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return MusicBinder(this)
     }
 
+    // 新增：播放完成回调处理
+    private fun onMusicCompletion(){
+        if (mSongList.isNullOrEmpty()) return
+        when(mPlayMode){
+            GlobalConsts.PLAY_MODE_CIRCLE  -> { nextSong() }
+            GlobalConsts.PLAY_MODE_RANDOM  -> { randomPlay() }
+            GlobalConsts.PLAY_MODE_SINGLE  -> { startPlay(curSongIdx,true) }
+            GlobalConsts.PLAY_MODE_ORDERED -> {
+                if(curSongIdx + 1 != mSongList?.size)nextSong()
+                else{
+                    mMediaPlayer.stop()
+                    mMyPlayerListener?.onStop()
+                }
+            }
+            else -> { nextSong() }
+        }
+    }
 
     // ============================== 与binder交互的部分
     fun setMusicList(data: ArrayList<SongData>?) { this.mSongList = data }
     fun setMusicCurIndex(idx: Int) { this.curSongIdx = idx }
+    fun setPlayerListener(myPlayerListener: MyPlayerListener){this.mMyPlayerListener = myPlayerListener}
     fun getMusicList():ArrayList<SongData>? { return this.mSongList  }
     fun getMusicCurIndex():Int { return this.curSongIdx }
     fun getCurProgress():Int{return mMediaPlayer.currentPosition}
+    fun getPlayMode():Int{return mPlayMode}
+
+
+    // ==================== 播放模式控制
+    fun switchMode(){
+        mPlayMode = (mPlayMode+1) % 4
+    }
+
+    // 生成随机模式播放列表
+    fun setRandonList(){
+        mRamdomPlayList?.clear()
+        mRamdomPlayList = InteractiveEvent.setRandomList(mSongList)
+    }
+
+    // 传入随机序号
+    fun randomPlay(){
+        if(mRamdomPlayList?.size == 0) { setRandonList() }
+        val inputIdx = mRamdomPlayList?.get(mRndIdx) as Int
+        startPlay(inputIdx)
+
+        mRndIdx += 1
+        if(mRndIdx == mSongList?.size){
+            setRandonList()
+            mRndIdx = 0
+        }
+    }
+
 
     // ==================== 播放控制
     fun seekTo(progress:Int){ mMediaPlayer.seekTo(progress) }
@@ -50,11 +108,15 @@ class MusicService : Service() {
     }
     fun previous(){
         var idx = (curSongIdx + (mSongList?.size ?: 1) - 1) % (mSongList?.size ?: 1)
-        startPlay(idx)
+        if(mPlayMode == GlobalConsts.PLAY_MODE_RANDOM) { randomPlay() }
+        else { startPlay(idx) }
+        mMyPlayerListener?.onPlay()
     }
     fun nextSong(){
         var idx = (curSongIdx + 1) % (mSongList?.size ?: 1)
-        startPlay(idx)
+        if(mPlayMode == GlobalConsts.PLAY_MODE_RANDOM) { randomPlay() }
+        else { startPlay(idx) }
+        mMyPlayerListener?.onPlay()
     }
 
     // 播放默认曲目
@@ -96,6 +158,7 @@ class MusicService : Service() {
         startPlay() // 调用无参数版本开始播放
     }
 
+    // 监听并通知
 
 
     // 新增：在服务销毁时释放资源

@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.my_application114514.R
+import com.example.my_application114514.data.GlobalConsts
 import com.example.my_application114514.data.SongData
 import com.example.my_application114514.service.binder.MusicBinder
+import java.util.Collections
 
 
 // 我简直是解耦大王
@@ -38,6 +40,27 @@ object InteractiveEvent {
     }
 
     // 播放模式控制
+    fun setPlayMode(musicBinder: MusicBinder,mImageView: ImageView){
+        var mMode = musicBinder.getPlayMode()
+        when(mMode){
+            GlobalConsts.PLAY_MODE_ORDERED -> { mImageView.setImageResource(R.drawable.outline_playlist_play_24)}
+            GlobalConsts.PLAY_MODE_CIRCLE  -> { mImageView.setImageResource(R.drawable.baseline_repeat_24)}
+            GlobalConsts.PLAY_MODE_RANDOM  -> { mImageView.setImageResource(R.drawable.baseline_shuffle_24)}
+            GlobalConsts.PLAY_MODE_SINGLE  -> { mImageView.setImageResource(R.drawable.baseline_repeat_one_24)}
+            else -> { mImageView.setImageResource(R.drawable.outline_playlist_play_24)}
+        }
+    }
 
+    // 生成随机播放列表
+    fun setRandomList(mSongList:ArrayList<SongData>?) : ArrayList<Int>{
+        val orderedList = ArrayList<Int>().apply { for(i in 0 until (mSongList?.size ?:0)){ add(i)} }
+
+        val random = java.util.Random()
+        for(i in orderedList.size -1 downTo 1){
+            val j = random.nextInt(i+1)
+            Collections.swap(orderedList,i,j)
+        }
+        return orderedList
+    }
 
 }

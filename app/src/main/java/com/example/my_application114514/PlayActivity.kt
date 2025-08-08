@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 import com.example.my_application114514.data.SongData
+import com.example.my_application114514.listener.MyPlayerListener
 import com.example.my_application114514.service.MusicService
 import com.example.my_application114514.service.binder.MusicBinder
 import com.example.my_application114514.util.InteractiveEvent
@@ -30,6 +31,7 @@ class PlayActivity : AppCompatActivity() {
     lateinit var mNextSongSwitch: ImageView
     lateinit var mStopSwitch: ImageView
     lateinit var mAlbumPic : ImageView
+    lateinit var mPlayModeIcon : ImageView
     lateinit var mTotalTime : TextView
     lateinit var mCurTime : TextView
     lateinit var mPlayTitle : TextView
@@ -66,6 +68,7 @@ class PlayActivity : AppCompatActivity() {
         mNextSongSwitch = findViewById(R.id.play_next_switch)
         mStopSwitch = findViewById(R.id.play_stop_switch)
         mSeekBar = findViewById(R.id.play_proc_bar)
+        mPlayModeIcon = findViewById(R.id.play_mode)
     }
 
     fun initListener(){
@@ -98,10 +101,16 @@ class PlayActivity : AppCompatActivity() {
             }
         })
 
+        mPlayModeIcon.setOnClickListener {
+            mMusicBinder.switchMode()
+            InteractiveEvent.setPlayMode(mMusicBinder,mPlayModeIcon)
+        }
     }
 
     fun updateUI(){
         if (::mMusicBinder.isInitialized){mSongIndex = mMusicBinder.getMusicCurIndex()}
+        if (::mMusicBinder.isInitialized){ InteractiveEvent.setPlayMode(mMusicBinder,mPlayModeIcon) }
+
         val currentSong = mSongList?.get(mSongIndex) ?: return // 或者用其他默认值
         mTotalTime.text = currentSong.displayTotTime
         mSeekBar.max = (currentSong.totalPlayTime)
@@ -138,6 +147,10 @@ class PlayActivity : AppCompatActivity() {
             mMusicBinder.setMusicList(mSongList);
             mMusicBinder.setMusicCurIndex(mSongIndex);
             mMusicBinder.startPlay();
+            mMusicBinder.setPlayerListener(object : MyPlayerListener {
+                override fun onStop() {mPlayPauseSwitch.setImageResource(R.drawable.baseline_play_arrow_24)}
+                override fun onPlay() {updateUI()}
+            })
             updateProgress()
         }
 
