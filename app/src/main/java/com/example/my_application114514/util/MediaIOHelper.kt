@@ -15,9 +15,11 @@ import java.util.ArrayList
 
 object MediaIOHelper {
 
-    // 动态读取assets目录下的歌曲列表
-    fun loadSongsFromAssets(mContext: Context): kotlin.collections.ArrayList<SongData> {
-        val songList: kotlin.collections.ArrayList<SongData> = ArrayList()
+    // ============================== 动态读取assets目录下的歌曲列表
+    fun loadSongsFromAssets(
+        mContext: Context
+    ): ArrayList<SongData> {
+        val songList: ArrayList<SongData> = ArrayList()
         val assetManager = mContext.assets
 
         assetManager.list("")?.forEach{ fileName ->
@@ -35,6 +37,7 @@ object MediaIOHelper {
         return songList
     }
 
+    // ============================== 读取当前曲目的播放总时长
     fun getSongDurationFromAssets(assetPath:String,mContext: Context) : Int{
         val mediaplayer = MediaPlayer()
         return try {
@@ -52,7 +55,12 @@ object MediaIOHelper {
         }
     }
 
-    fun loadAlbumPicFromAssets(mContext:Context,imageView: ImageView, assetPath: String) {
+    // ============================== 读取并加载当前曲目的同名专辑图片
+    fun loadAlbumPicFromAssets(
+        mContext:Context,
+        imageView: ImageView,
+        assetPath: String
+    ) {
         try {
             val inputStream = mContext.assets.open(assetPath)
             val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -63,7 +71,7 @@ object MediaIOHelper {
         }
     }
 
-    // 采用泛型封装
+    // ============================== 泛型封装播放列表传递
     inline fun <reified T> loadSongList(
         context: Context,
         mList: java.util.ArrayList<SongData>,
@@ -76,6 +84,7 @@ object MediaIOHelper {
     }
 
 
+    // ============================== 读取传递信息方法
     fun readSongIndex(intent: Intent): Int {
         return intent.getIntExtra(GlobalConsts.SONG_INDEX, -1)
     }

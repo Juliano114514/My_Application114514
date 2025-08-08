@@ -38,8 +38,6 @@ class SongAdapter (
         }
     }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_layout,parent,false)
@@ -52,7 +50,6 @@ class SongAdapter (
         holder.totalTime.text = currentSong.displayTotTime
         MediaIOHelper.loadAlbumPicFromAssets(mContext,holder.albumPic,currentSong.albumPicPath)
     }
-
-
+    
     override fun getItemCount() = songList.size
 }

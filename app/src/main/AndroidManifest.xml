@@ -23,7 +23,7 @@
         android:theme="@style/Theme.My_Application114514">
       </activity>
 
-<!--      <service android:name="com.example.my_application114514.service.MusicService" />-->
+      <service android:name="com.example.my_application114514.service.MusicService" />
 
     </application>
 
